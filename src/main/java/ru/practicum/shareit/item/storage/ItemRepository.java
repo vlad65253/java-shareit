@@ -1,20 +1,25 @@
 package ru.practicum.shareit.item.storage;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
+@RequiredArgsConstructor
 public class ItemRepository {
-    HashMap<Long, Item> items = new HashMap<>();
-
+    private final HashMap<Long, Item> items = new HashMap<>();
+    private final HashMap<Long, List<Item>> itemsByOwner = new HashMap<>();
 
     public Item createItem(Long id, Item item) {
         items.put(id, item);
         item.setId(id);
+        long ownerId = item.getOwner().getId();
+        if (!itemsByOwner.containsKey(ownerId)) {
+            itemsByOwner.put(ownerId, new ArrayList<>());
+        }
+        itemsByOwner.get(ownerId).add(item);
         return item;
     }
 
@@ -33,8 +38,6 @@ public class ItemRepository {
     }
 
     public List<Item> findAllByOwnerId(long userId) {
-        return items.values().stream()
-                .filter(item -> item.getOwner().getId() == userId)
-                .toList();
+        return itemsByOwner.get(userId);
     }
 }

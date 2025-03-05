@@ -8,13 +8,12 @@ import lombok.Data;
 @Data
 @Builder(toBuilder = true)
 public class ItemDto {
-    Long id;
-    @NotNull
+    private Long id;
     @NotBlank
-    String name;
+    private String name;
     @NotNull
-    String description;
+    private String description;
     @NotNull
-    Boolean available;
-    Long requestId;
+    private Boolean available;
+    private Long requestId;
 }

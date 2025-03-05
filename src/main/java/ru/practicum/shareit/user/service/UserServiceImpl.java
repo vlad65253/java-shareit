@@ -10,6 +10,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.interfaces.UserService;
 import ru.practicum.shareit.user.storage.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,6 +18,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private long id = 0;
+    private final List<String> emails = new ArrayList<>();
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException("Такой емаил уже существует"); // Email уже существует
         }
         User user = UserMapper.toUser(userDto);
+        emails.add(user.getEmail());
         return UserMapper.toUserDto(userRepository.createUser(generateId(), user));
     }
 
@@ -61,12 +64,11 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteUser(userId);
     }
 
-    public long generateId() {
+    private long generateId() {
         return id++;
     }
 
-    public boolean existsByEmail(String email) {
-        return userRepository.getUsers().stream()
-                .anyMatch(user -> user.getEmail().equalsIgnoreCase(email));
+    private boolean existsByEmail(String email) {
+        return emails.contains(email);
     }
 }

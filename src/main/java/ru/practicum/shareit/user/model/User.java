@@ -1,14 +1,15 @@
 package ru.practicum.shareit.user.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Data;
+import ru.practicum.shareit.item.model.Item;
 
 @Data
 public class User {
-    Long id;
-    String name;
-    @NotBlank
-    @Email
-    String email;
+    private Long id;
+    private String name;
+    private String email;
+    private List<Item> itemsForUser = new ArrayList<>();
 }

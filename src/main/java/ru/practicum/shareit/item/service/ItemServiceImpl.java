@@ -76,7 +76,7 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(itemRepository.createItem(itemId, item));
     }
 
-    public long generateId() {
+    private long generateId() {
         return id++;
     }
 }
