@@ -14,7 +14,7 @@ public class UserRepository {
     private final Set<String> emails = new LinkedHashSet<>();
 
     public User createUser(long id, User user) {
-        if(emails.contains(user.getEmail())){
+        if (emails.contains(user.getEmail())) {
             throw new ValidationException("Email должен быть уникальным");
         }
         emails.add(user.getEmail());
