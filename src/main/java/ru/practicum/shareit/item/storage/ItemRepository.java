@@ -27,10 +27,6 @@ public class ItemRepository {
         return Optional.ofNullable(items.get(itemId));
     }
 
-    public List<Item> getItems() {
-        return items.values().stream().toList();
-    }
-
     public List<Item> findAllByNameLikeOrDescriptionLike(String text) {
         return items.values().stream()
                 .filter(item -> (item.getName().equalsIgnoreCase(text) || item.getDescription().equalsIgnoreCase(text)) && item.isAvailable())
