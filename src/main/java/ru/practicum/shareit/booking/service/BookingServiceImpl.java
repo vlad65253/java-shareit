@@ -90,7 +90,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto getBookingsByOwnerAndBooker(Long userId, Long bookingId) {
+    public BookingDto getBookingsByOwnerAndBooker(long userId, long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено"));
         if (booking.getItem().getOwner().getId() != userId && booking.getBooker().getId() != userId) {

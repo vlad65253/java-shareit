@@ -14,7 +14,7 @@ public interface BookingService {
 
     List<BookingDto> getBookingsByOwnerIdAndState(long userId, State state);
 
-    BookingDto getBookingsByOwnerAndBooker(Long userId, Long bookingId);
+    BookingDto getBookingsByOwnerAndBooker(long userId, long bookingId);
 
     BookingDto patchBooking(long bookingId, boolean approved, long userId);
 }
