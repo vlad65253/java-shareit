@@ -9,7 +9,6 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.interfaces.UserService;
 import ru.practicum.shareit.user.storage.UserRepository;
 
-
 import java.util.List;
 
 @Service

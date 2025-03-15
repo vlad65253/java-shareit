@@ -79,7 +79,8 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException("Предмет не найден"));
         List<Booking> bookings = bookingRepository.findAllByItemIdAndBookerId(itemId, userId);
         for (Booking booking : bookings) {
-            if (booking.getStatus() == Status.APPROVED && booking.getEnd().isBefore(LocalDateTime.now())) {
+            if (booking.getStatus() == Status.APPROVED && booking.getEnd().isBefore(LocalDateTime.now())
+                    && booking.getItem().getId() == itemId) {
                 Comment comment = CommentMapper.toComment(text.trim(), author, item, LocalDateTime.now());
                 Comment createdComment = commentRepository.save(comment);
                 return CommentMapper.toCommentDto(createdComment);

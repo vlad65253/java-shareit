@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
 public class BookingController {
-    private final BookingService bookingService;
     private static final String HEADER_USER_ID = "X-Sharer-User-Id";
+    private final BookingService bookingService;
 
     @PostMapping
     public BookingDto createBooking(@RequestHeader(HEADER_USER_ID) Long userId, @RequestBody CreateBookingDto createBookingDto) {

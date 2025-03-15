@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
@@ -37,6 +38,11 @@ public class BookingServiceImpl implements BookingService {
         Item item = itemRepository.findById(createBookingDto.getItemId())
                 .orElseThrow(() -> new NotFoundException("Вещи с таким айди нет"));
         if (!item.getAvailable()) {
+            throw new ValidationException("Предмет недоступен");
+        }
+        List<Booking> bookings = bookingRepository.findAllByIntersectingStartAndEnd(
+                item.getId(), createBookingDto.getStart(), createBookingDto.getEnd());
+        if (!bookings.isEmpty()) {
             throw new ValidationException("Невозможно забронировать");
         }
         Booking booking = BookingMapper.toBookingNew(createBookingDto, item, user);
@@ -100,6 +106,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public BookingDto patchBooking(long bookingId, boolean approved, long userId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено"));
@@ -107,6 +114,9 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена"));
         if (item.getOwner().getId() != userId) {
             throw new ValidationException("Вы не вледелец этой вещи");
+        }
+        if (booking.getStatus() != Status.WAITING) {
+            throw new ValidationException("Бронирование уже подтверждено");
         }
         if (approved) {
             booking.setStatus(Status.APPROVED);

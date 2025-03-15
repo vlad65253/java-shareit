@@ -14,8 +14,8 @@ import java.util.List;
 @RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
-    private final ItemService itemService;
     private static final String HEADER_USER_ID = "X-Sharer-User-Id";
+    private final ItemService itemService;
 
     @PostMapping
     public ItemDto createItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader(HEADER_USER_ID) long userId) {
@@ -46,7 +46,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@PathVariable long itemId,
                                  @RequestHeader(HEADER_USER_ID) long userId,
-                                 @RequestBody NewCommentDto newCommentDto) {
+                                 @Valid @RequestBody NewCommentDto newCommentDto) {
         return itemService.addComment(userId, itemId, newCommentDto.getText());
     }
 
