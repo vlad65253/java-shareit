@@ -6,12 +6,16 @@ import ru.practicum.shareit.user.model.User;
 
 public class ItemMapper {
     public static ItemDto toItemDto(Item item) {
-        return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.isAvailable())
-                .build();
+        ItemDto itemDto = new ItemDto();
+        itemDto.setId(item.getId());
+        itemDto.setName(item.getName());
+        itemDto.setDescription(item.getDescription());
+        itemDto.setAvailable(item.getAvailable());
+        itemDto.setRequest(item.getRequest() != null ? item.getRequest() : null);
+        itemDto.setComments(item.getComments() != null ? item.getComments().stream()
+                .map(CommentMapper::toCommentDto)
+                .toList() : null);
+        return itemDto;
     }
 
     public static Item toItem(ItemDto itemDto, User owner) {

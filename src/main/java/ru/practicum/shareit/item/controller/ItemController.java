@@ -3,20 +3,19 @@ package ru.practicum.shareit.item.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.NewCommentDto;
 import ru.practicum.shareit.item.service.interfaces.ItemService;
 
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
-    private final ItemService itemService;
     private static final String HEADER_USER_ID = "X-Sharer-User-Id";
+    private final ItemService itemService;
 
     @PostMapping
     public ItemDto createItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader(HEADER_USER_ID) long userId) {
@@ -43,4 +42,12 @@ public class ItemController {
     public ItemDto patchItem(@RequestBody ItemDto itemDto, @RequestHeader(HEADER_USER_ID) long userId, @PathVariable long itemId) {
         return itemService.patchItem(itemId, itemDto, userId);
     }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComment(@PathVariable long itemId,
+                                 @RequestHeader(HEADER_USER_ID) long userId,
+                                 @Valid @RequestBody NewCommentDto newCommentDto) {
+        return itemService.addComment(userId, itemId, newCommentDto.getText());
+    }
+
 }
