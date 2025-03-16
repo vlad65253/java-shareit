@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.storage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.model.Booking;
 
@@ -31,5 +32,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByItemIdAndBookerId(long itemId, long userId);
 
-    List<Booking> findAllByIntersectingStartAndEnd(Long id, LocalDateTime start, LocalDateTime end);
+    @Query("select b from Booking b " +
+            "where ?1 = b.item.id and 'APPROVED' = b.status and ?2 <= b.end AND ?3 >= b.start")
+    List<Booking> findAllByIntersectingStartAndEnd(long itemId, LocalDateTime start, LocalDateTime end);
 }
