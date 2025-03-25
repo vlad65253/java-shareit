@@ -13,20 +13,24 @@ import java.util.List;
 public class ItemRequestController {
     private final ItemRequestService itemRequestService;
     private static final String HEADER_USER_ID = "X-Sharer-User-Id";
+
     @PostMapping
-    public ItemRequestDto createRequest(@RequestBody ItemRequestDto itemRequestDto, @RequestHeader(HEADER_USER_ID) long userId){
+    public ItemRequestDto createRequest(@RequestBody ItemRequestDto itemRequestDto, @RequestHeader(HEADER_USER_ID) long userId) {
         return itemRequestService.createRequest(itemRequestDto, userId);
     }
+
     @GetMapping
-    public List<ItemRequestDto> getRequests(@RequestHeader(HEADER_USER_ID) long userId){
+    public List<ItemRequestDto> getRequests(@RequestHeader(HEADER_USER_ID) long userId) {
         return itemRequestService.getRequests(userId);
     }
+
     @GetMapping("/all")
-    public List<ItemRequestDto> getRequestsOtherUser(@RequestHeader(HEADER_USER_ID) long userId){
+    public List<ItemRequestDto> getRequestsOtherUser(@RequestHeader(HEADER_USER_ID) long userId) {
         return itemRequestService.getRequestsOtherUser(userId);
     }
+
     @GetMapping("/{requestId}")
-    public ItemRequestDto getRequestsById(@RequestHeader(HEADER_USER_ID) long userId, @PathVariable long requestId){
+    public ItemRequestDto getRequestsById(@RequestHeader(HEADER_USER_ID) long userId, @PathVariable long requestId) {
         return itemRequestService.getRequestById(userId, requestId);
     }
 }

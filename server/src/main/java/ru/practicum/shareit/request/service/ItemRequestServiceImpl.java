@@ -58,7 +58,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         return itemRequestDto;
     }
 
-    public User validateUser(long userId){
+    public User validateUser(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }

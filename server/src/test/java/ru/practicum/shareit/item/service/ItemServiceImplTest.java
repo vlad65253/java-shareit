@@ -36,19 +36,19 @@ public class ItemServiceImplTest {
     private ItemService itemService;
 
     @Autowired
-    private ItemRepository ItemRepository;
+    private ItemRepository itemRepository;
 
     @Autowired
-    private CommentRepository CommentRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private ItemRequestRepository ItemRequestRepository;
+    private ItemRequestRepository itemRequestRepository;
 
     @Autowired
-    private BookingRepository BookingRepository;
+    private BookingRepository bookingRepository;
 
     private ItemDto itemDto;
     private CommentDto commentDto;
@@ -62,14 +62,14 @@ public class ItemServiceImplTest {
         User user = new User();
         user.setName("Test User");
         user.setEmail("test@example.com");
-        user = UserRepository.save(user);
+        user = userRepository.save(user);
         userId = user.getId();
 
         ItemRequest itemRequest = new ItemRequest();
         itemRequest.setDescription("Test Request");
         itemRequest.setCreatedUser(user);
         itemRequest.setCreated(LocalDateTime.now());
-        itemRequest = ItemRequestRepository.save(itemRequest);
+        itemRequest = itemRequestRepository.save(itemRequest);
         itemRequestId = itemRequest.getId();
 
         itemDto = ItemDto.builder()
@@ -88,12 +88,12 @@ public class ItemServiceImplTest {
 
         // Создание завершенной аренды
         Booking booking = new Booking();
-        booking.setItem(ItemRepository.findById(itemId).orElseThrow());
+        booking.setItem(itemRepository.findById(itemId).orElseThrow());
         booking.setBooker(user);
         booking.setStart(LocalDateTime.now().minusDays(2));
         booking.setEnd(LocalDateTime.now().minusDays(1));
         booking.setStatus(Status.APPROVED);
-        booking = BookingRepository.save(booking);
+        booking = bookingRepository.save(booking);
         bookingId = booking.getId();
     }
 
@@ -201,7 +201,7 @@ public class ItemServiceImplTest {
     @Test
     void testCreateCommentWithNonBookedItem() {
         // Удаление завершенной аренды для проверки исключения
-        BookingRepository.deleteById(bookingId);
+        bookingRepository.deleteById(bookingId);
         assertThrows(ValidationException.class, () -> itemService.addComment(userId, itemId, commentDto.getText()));
     }
 
@@ -220,7 +220,7 @@ public class ItemServiceImplTest {
         User newUser = new User();
         newUser.setName("New User");
         newUser.setEmail("newuser@example.com");
-        newUser = UserRepository.save(newUser);
+        newUser = userRepository.save(newUser);
         Long newUserId = newUser.getId();
 
         assertThrows(ValidationException.class, () -> itemService.patchItem(itemId, itemDto, newUserId));
