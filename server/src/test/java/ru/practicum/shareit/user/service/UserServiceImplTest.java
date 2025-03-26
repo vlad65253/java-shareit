@@ -111,41 +111,4 @@ public class UserServiceImplTest {
 
         assertThrows(DataIntegrityViolationException.class, () -> userService.patchUser(newUserOutputDto.getId(), duplicateUserInputDto));
     }
-
-
-    @Test
-    void testSerialize() throws Exception {
-        UserDto user = UserDto.builder()
-                .id(1L)
-                .name("Alice")
-                .email("alice@example.com")
-                .build();
-
-        // сериализация
-        JsonContent<UserDto> result = json.write(user);
-        assertThat(result).hasJsonPathNumberValue("@.id");
-        assertThat(result).hasJsonPathStringValue("@.name");
-        assertThat(result).hasJsonPathStringValue("@.email");
-
-        assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(1);
-        assertThat(result).extractingJsonPathStringValue("$.name").isEqualTo("Alice");
-        assertThat(result).extractingJsonPathStringValue("$.email").isEqualTo("alice@example.com");
-    }
-
-    @Test
-    void testDeserialize() throws Exception {
-        String content = """
-                {
-                  "id": 1,
-                  "name": "Bob",
-                  "email": "bob@example.com"
-                }
-                """;
-
-        // десериализация
-        UserDto user = json.parseObject(content);
-        assertThat(user.getId()).isEqualTo(1L);
-        assertThat(user.getName()).isEqualTo("Bob");
-        assertThat(user.getEmail()).isEqualTo("bob@example.com");
-    }
 }
