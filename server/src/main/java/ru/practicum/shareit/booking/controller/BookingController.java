@@ -9,7 +9,7 @@ import ru.practicum.shareit.booking.service.interfaces.BookingService;
 
 import java.util.List;
 
-@RestController("bookingControllerV1")
+@RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
 public class BookingController {

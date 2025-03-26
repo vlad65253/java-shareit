@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.boot.test.json.JsonContent;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.interfaces.UserService;
 import ru.practicum.shareit.user.storage.UserRepository;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -25,6 +28,8 @@ public class UserServiceImplTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JacksonTester<UserDto> json;
 
     private UserDto userDto;
     private Long userId;
@@ -105,5 +110,42 @@ public class UserServiceImplTest {
         UserDto newUserOutputDto = userService.createUser(newUserInputDto);
 
         assertThrows(DataIntegrityViolationException.class, () -> userService.patchUser(newUserOutputDto.getId(), duplicateUserInputDto));
+    }
+
+
+    @Test
+    void testSerialize() throws Exception {
+        UserDto user = UserDto.builder()
+                .id(1L)
+                .name("Alice")
+                .email("alice@example.com")
+                .build();
+
+        // сериализация
+        JsonContent<UserDto> result = json.write(user);
+        assertThat(result).hasJsonPathNumberValue("@.id");
+        assertThat(result).hasJsonPathStringValue("@.name");
+        assertThat(result).hasJsonPathStringValue("@.email");
+
+        assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(1);
+        assertThat(result).extractingJsonPathStringValue("$.name").isEqualTo("Alice");
+        assertThat(result).extractingJsonPathStringValue("$.email").isEqualTo("alice@example.com");
+    }
+
+    @Test
+    void testDeserialize() throws Exception {
+        String content = """
+                {
+                  "id": 1,
+                  "name": "Bob",
+                  "email": "bob@example.com"
+                }
+                """;
+
+        // десериализация
+        UserDto user = json.parseObject(content);
+        assertThat(user.getId()).isEqualTo(1L);
+        assertThat(user.getName()).isEqualTo("Bob");
+        assertThat(user.getEmail()).isEqualTo("bob@example.com");
     }
 }
