@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +25,6 @@ public class UserServiceImplTest {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private JacksonTester<UserDto> json;
 
     private UserDto userDto;
     private Long userId;

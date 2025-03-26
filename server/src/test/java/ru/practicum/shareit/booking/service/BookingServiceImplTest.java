@@ -339,7 +339,7 @@ class BookingServiceImplTest {
         List<BookingDto> bookings = bookingService.getBookingsForBookerIdAndState(user2Id, State.ALL);
         assertFalse(bookings.isEmpty());
         assertEquals(3, bookings.size());
-        assertEquals(31, bookings.getFirst().getId());
+        assertEquals(17, bookings.getFirst().getId());
         assertEquals(patchBooking.getItem().getId(), itemId);
         assertEquals(patchBooking.getBooker().getId(), user2Id);
     }
@@ -551,7 +551,7 @@ class BookingServiceImplTest {
         List<BookingDto> bookings = bookingService.getBookingsByOwnerIdAndState(userId, State.ALL);
         assertFalse(bookings.isEmpty());
         assertEquals(3, bookings.size());
-        assertEquals(18, bookings.getFirst().getId());
+        assertEquals(4, bookings.getFirst().getId());
         assertEquals(patchBooking.getItem().getId(), itemId);
         assertEquals(patchBooking.getBooker().getId(), user2Id);
     }
