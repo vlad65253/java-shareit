@@ -14,7 +14,8 @@ public class UserDtoJsonTest {
     private JacksonTester<UserDto> json;
 
     @Test
-    void testSerialize() throws Exception {
+    void testSerialize() throws Exception
+    {
         UserDto user = UserDto.builder()
                 .id(1L)
                 .name("Alice")
@@ -33,7 +34,8 @@ public class UserDtoJsonTest {
     }
 
     @Test
-    void testDeserialize() throws Exception {
+    void testDeserialize() throws Exception
+    {
         String content = """
                    {
                    "id": 2,
